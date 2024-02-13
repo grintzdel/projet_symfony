@@ -9,6 +9,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 class ArticlesType extends AbstractType
 {
@@ -17,7 +18,12 @@ class ArticlesType extends AbstractType
         $builder
             ->add('title')
             ->add('description')
-            ->add('thumbnail')
+            ->add('thumbnail', FileType::class, [
+                'label' => 'Thumbnail (image file)',
+                'mapped' => false,
+                'required' => false,
+                'attr' => ['placeholder' => 'Choose file'],
+            ])
             ->add('date')
             ->add('moyenne_avis')
             ->add('id_user', EntityType::class, [
