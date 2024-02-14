@@ -7,6 +7,7 @@ use App\Form\ArticlesType;
 use App\Repository\ArticlesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -30,6 +31,24 @@ class ArticlesController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $thumbnailFile = $form['thumbnail']->getData();
+
+            if ($thumbnailFile) {
+                $originalFilename = pathinfo($thumbnailFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $newFilename = $originalFilename.'-'.uniqid().'.'.$thumbnailFile->guessExtension();
+
+                try {
+                    $thumbnailFile->move(
+                        $this->getParameter('thumbnails_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+
+                $article->setThumbnail($newFilename);
+            }
+
             $entityManager->persist($article);
             $entityManager->flush();
 
@@ -57,6 +76,24 @@ class ArticlesController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $thumbnailFile = $form['thumbnail']->getData();
+
+            if ($thumbnailFile) {
+                $originalFilename = pathinfo($thumbnailFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $newFilename = $originalFilename.'-'.uniqid().'.'.$thumbnailFile->guessExtension();
+
+                try {
+                    $thumbnailFile->move(
+                        $this->getParameter('thumbnails_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+
+                $article->setThumbnail($newFilename);
+            }
+
             $entityManager->flush();
 
             return $this->redirectToRoute('app_articles_index', [], Response::HTTP_SEE_OTHER);
