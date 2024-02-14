@@ -43,7 +43,7 @@ class ArticlesController extends AbstractController
                         $newFilename
                     );
                 } catch (FileException $e) {
-                    // ... handle exception if something happens during file upload
+                    // On peut gérer l'exception ici si y'a un problème lors de l'upload
                 }
 
                 $article->setThumbnail($newFilename);

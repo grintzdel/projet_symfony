@@ -20,8 +20,6 @@ class ArticlesType extends AbstractType
             ->add('description')
             ->add('thumbnail', FileType::class, [
                 'label' => 'Thumbnail (image file)',
-                'mapped' => false,
-                'required' => false,
                 'attr' => ['placeholder' => 'Choose file'],
             ])
             ->add('date')
