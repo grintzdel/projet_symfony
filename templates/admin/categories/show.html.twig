@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>{{ category.title }}</h1>
+
+    <p>{{ category.description }}</p>
+
+    <a href="{{ path('admin_categories_edit', {id: category.id}) }}">Modifier</a>
+
+    <form method="post" action="{{ path('admin_categories_delete', {id: category.id}) }}">
+        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ category.id) }}">
+        <button type="submit">Supprimer</button>
+    </form>
+{% endblock %}
