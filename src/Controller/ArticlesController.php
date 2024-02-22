@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Avis;
 use App\Entity\Articles;
 use App\Form\ArticlesType;
+use App\Form\AvisType;
 use App\Repository\ArticlesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -61,11 +63,27 @@ class ArticlesController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_articles_show', methods: ['GET'])]
-    public function show(Articles $article): Response
+
+    #[Route('/{id}', name: 'app_articles_show', methods: ['GET', 'POST'])]
+    public function show(Articles $article, Request $request, EntityManagerInterface $entityManager): Response
     {
+        $avis = new Avis();
+        $form = $this->createForm(AvisType::class, $avis);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $avis->setIdUser($this->getUser());
+            $avis->setIdArticles($article);
+            $entityManager->persist($avis);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_articles_show', ['id' => $article->getId()]);
+        }
+
         return $this->render('articles/show.html.twig', [
             'article' => $article,
+            'avis' => $article->getAvis(),
+            'form' => $form->createView(),
         ]);
     }
 
@@ -114,5 +132,28 @@ class ArticlesController extends AbstractController
         }
 
         return $this->redirectToRoute('app_articles_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{id}/ajouter-avis', name: 'articles_ajouter_avis', methods: ['GET', 'POST'])]
+    public function ajouterAvis(Request $request, Articles $article): Response
+    {
+        $avis = new Avis();
+        $form = $this->createForm(AvisType::class, $avis);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $avis->setIdUser($this->getUser());
+            $avis->setIdArticles($article);
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($avis);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_articles_show', ['id' => $article->getId()]);
+        }
+
+        return $this->render('articles/ajouter_avis.html.twig', [
+            'article' => $article,
+            'form' => $form->createView(),
+        ]);
     }
 }
