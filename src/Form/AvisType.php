@@ -21,7 +21,6 @@ class AvisType extends AbstractType
                 'attr' => ['min' => 1, 'max' => 5]
             ])
             ->add('commentaires', TextareaType::class, ['label' => 'Descriptif d\'avis'])
-            ->add('date', DateType::class, ['label' => 'Date de création'])
             ->add('status', ChoiceType::class, [
                 'label' => 'État de modération de l\'avis',
                 'choices' => [

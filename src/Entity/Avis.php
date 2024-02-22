@@ -33,6 +33,11 @@ class Avis
     #[ORM\Column(length: 50)]
     private ?string $status = null;
 
+    public function __construct()
+    {
+        $this->date = new \DateTime();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
