@@ -7,6 +7,7 @@
 
     <p>{{ article.description }}</p>
 
+
     <h2>Commentaires</h2>
     {% for avi in avis %}
         <div>
@@ -29,4 +30,10 @@
     {% endif %}
 
     <a href="{{ path('app_articles_index') }}">Retour à la liste des articles</a>
+    {% if app.user %}
+        <form method="post" action="{{ path('app_articles_save', {'id': article.id}) }}">
+            <input type="hidden" name="_token" value="{{ csrf_token('save' ~ article.id) }}">
+            <button type="submit">Enregistrer cet article</button>
+        </form>
+    {% endif %}
 {% endblock %}

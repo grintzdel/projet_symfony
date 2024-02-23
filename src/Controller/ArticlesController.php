@@ -156,4 +156,13 @@ class ArticlesController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    #[Route('/{id}/save', name: 'app_articles_save', methods: ['POST'])]
+    public function save(Articles $article, EntityManagerInterface $entityManager): Response
+    {
+        $this->getUser()->addSavedArticle($article);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_articles_show', ['id' => $article->getId()]);
+    }
 }

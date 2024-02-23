@@ -38,10 +38,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Avis::class, mappedBy: 'id_user', orphanRemoval: true)]
     private Collection $avis;
 
+    #[ORM\ManyToMany(targetEntity: Articles::class)]
+    private Collection $savedArticles;
+
     public function __construct()
     {
         $this->articles = new ArrayCollection();
         $this->avis = new ArrayCollection();
+        $this->savedArticles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -170,6 +174,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $avi->setIdUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSavedArticles(): Collection
+    {
+        return $this->savedArticles;
+    }
+
+    public function addSavedArticle(Articles $article): static
+    {
+        if (!$this->savedArticles->contains($article)) {
+            $this->savedArticles->add($article);
+        }
+
+        return $this;
+    }
+
+    public function removeSavedArticle(Articles $article): static
+    {
+        $this->savedArticles->removeElement($article);
 
         return $this;
     }

@@ -31,4 +31,12 @@
     <a href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
 
     {{ include('user/_delete_form.html.twig') }}
+
+    {% for article in app.user.getSavedArticles %}
+        <h2>{{ article.getTitle() }}</h2>
+        <p>{{ article.getDescription() }}</p>
+        <a href="{{ path('app_articles_show', {'id': article.id}) }}">Voir cet article</a>
+    {% else %}
+    {% endfor %}
+    <p>Aucun article enregistré.</p>
 {% endblock %}
