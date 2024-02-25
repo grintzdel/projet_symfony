@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Articles prédéfinis{% endblock %}
+
+{% block body %}
+    <h1>Articles prédéfinis</h1>
+
+    <a href="{{ path('admin_predefined_articles_new') }}" class="btn btn-primary">Ajouter un nouvel article</a>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Titre</th>
+            <th>Description</th>
+            ->
+        </tr>
+        </thead>
+        <tbody>
+        {% for predefinedArticle in predefinedArticles %}
+            <tr>
+                <td>{{ predefinedArticle.getArticle().getTitle() }}</td>
+                <td>{{ predefinedArticle.getArticle().getDescription() }}</td>
+
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
