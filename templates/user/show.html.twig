@@ -7,22 +7,22 @@
 
     <table class="table">
         <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ user.id }}</td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td>{{ user.email }}</td>
-            </tr>
-            <tr>
-                <th>Roles</th>
-                <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
-            </tr>
-            <tr>
-                <th>Password</th>
-                <td>{{ user.password }}</td>
-            </tr>
+        <tr>
+            <th>Id</th>
+            <td>{{ user.id }}</td>
+        </tr>
+        <tr>
+            <th>Email</th>
+            <td>{{ user.email }}</td>
+        </tr>
+        <tr>
+            <th>Roles</th>
+            <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
+        </tr>
+        <tr>
+            <th>Password</th>
+            <td>{{ user.password }}</td>
+        </tr>
         </tbody>
     </table>
 
@@ -32,11 +32,21 @@
 
     {{ include('user/_delete_form.html.twig') }}
 
-    {% for article in app.user.getSavedArticles %}
-        <h2>{{ article.getTitle() }}</h2>
+    <h2>Articles enregistrés</h2>
+    {% for article in user.getSavedArticles %}
+        <h3>{{ article.getTitle() }}</h3>
         <p>{{ article.getDescription() }}</p>
         <a href="{{ path('app_articles_show', {'id': article.id}) }}">Voir cet article</a>
     {% else %}
+        <p>Aucun article enregistré.</p>
     {% endfor %}
-    <p>Aucun article enregistré.</p>
+
+    <h2>Articles prédéfinis</h2>
+    {% for predefinedArticle in predefinedArticles %}
+        <h3>{{ predefinedArticle.getArticle().getTitle() }}</h3>
+        <p>{{ predefinedArticle.getArticle().getDescription() }}</p>
+        <a href="{{ path('app_articles_show', {'id': predefinedArticle.getArticle().id}) }}">Voir cet article</a>
+    {% else %}
+        <p>Aucun article prédéfini.</p>
+    {% endfor %}
 {% endblock %}
