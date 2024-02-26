@@ -22,7 +22,7 @@ class LoginController extends AbstractController
         if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
 
             if ($this->isGranted('ROLE_ADMIN')) {
-                return $this->redirectToRoute('app_default');
+                return $this->redirectToRoute('app_articles_index');
             }
         }
 
